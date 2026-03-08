@@ -1,53 +1,643 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>NoodMart</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NoodMart | Order Local, Fast</title>
+  <meta name="description" content="NoodMart connects customers with local restaurants and food vendors in Samanoud. Fast ordering, smooth delivery, and simple onboarding for merchants." />
+  <style>
+    :root {
+      --primary: #e53935;
+      --primary-dark: #c62828;
+      --accent: #ffb300;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --bg: #fff8f5;
+      --card: #ffffff;
+      --border: #f1d8d1;
+      --shadow: 0 16px 40px rgba(229, 57, 53, 0.12);
+      --radius: 20px;
+      --max: 1180px;
+    }
 
-<style>
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--text);
+      background: linear-gradient(180deg, #fff7f4 0%, #fff 35%, #fff 100%);
+    }
 
-body{
-font-family: Arial;
-background:#f5f5f5;
-text-align:center;
-padding:80px;
-}
+    a { text-decoration: none; color: inherit; }
 
-h1{
-font-size:50px;
-color:#ff4d4f;
-}
+    .container {
+      width: min(var(--max), calc(100% - 32px));
+      margin: 0 auto;
+    }
 
-p{
-font-size:20px;
-color:#555;
-}
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(10px);
+      background: rgba(255,255,255,0.88);
+      border-bottom: 1px solid rgba(229,57,53,0.08);
+    }
 
-button{
-background:#ff4d4f;
-color:white;
-border:none;
-padding:15px 30px;
-font-size:18px;
-border-radius:8px;
-cursor:pointer;
-}
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 0;
+    }
 
-</style>
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      font-size: 22px;
+    }
 
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), #ff6b57);
+      color: white;
+      font-size: 22px;
+      box-shadow: var(--shadow);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      color: var(--muted);
+      font-size: 15px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: none;
+      border-radius: 14px;
+      padding: 14px 20px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+
+    .btn-secondary {
+      background: white;
+      color: var(--primary);
+      border: 1px solid rgba(229,57,53,0.16);
+    }
+
+    .hero {
+      padding: 70px 0 42px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 42px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: #fff1ed;
+      border: 1px solid #ffd8cf;
+      color: var(--primary);
+      font-weight: 700;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(38px, 6vw, 64px);
+      line-height: 1.05;
+      margin: 0 0 18px;
+      letter-spacing: -1px;
+    }
+
+    .hero p {
+      font-size: 18px;
+      line-height: 1.7;
+      color: var(--muted);
+      margin: 0 0 26px;
+      max-width: 640px;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .hero-note {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    .hero-note span::before {
+      content: '✓';
+      color: #16a34a;
+      font-weight: 900;
+      margin-right: 8px;
+    }
+
+    .phone-wrap {
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .glow {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      background: radial-gradient(circle, rgba(229,57,53,0.18) 0%, rgba(229,57,53,0) 70%);
+      top: 60px;
+      border-radius: 50%;
+      filter: blur(8px);
+    }
+
+    .phone {
+      position: relative;
+      width: 320px;
+      border-radius: 34px;
+      background: #151515;
+      padding: 14px;
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.2);
+    }
+
+    .screen {
+      background: linear-gradient(180deg, #fff4ef 0%, #fff 100%);
+      border-radius: 24px;
+      padding: 18px;
+      min-height: 610px;
+      overflow: hidden;
+    }
+
+    .screen-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .app-title {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 14px;
+    }
+
+    .search-box {
+      background: white;
+      border: 1px solid #f1e3de;
+      border-radius: 14px;
+      padding: 12px 14px;
+      color: #9ca3af;
+      margin-bottom: 16px;
+    }
+
+    .chips {
+      display: flex;
+      gap: 10px;
+      overflow: auto;
+      padding-bottom: 6px;
+      margin-bottom: 18px;
+    }
+
+    .chip {
+      white-space: nowrap;
+      border-radius: 999px;
+      padding: 9px 14px;
+      background: white;
+      border: 1px solid #f1e3de;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    .chip.active {
+      color: white;
+      background: var(--primary);
+      border-color: var(--primary);
+    }
+
+    .food-card {
+      background: white;
+      border-radius: 18px;
+      border: 1px solid #f4e3dd;
+      overflow: hidden;
+      margin-bottom: 14px;
+      box-shadow: 0 8px 30px rgba(17, 24, 39, 0.05);
+    }
+
+    .food-cover {
+      height: 110px;
+      background: linear-gradient(135deg, #ffb300, #ff7043);
+    }
+
+    .food-content {
+      padding: 14px;
+    }
+
+    .food-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+      margin-bottom: 8px;
+    }
+
+    .food-name {
+      font-weight: 800;
+      font-size: 16px;
+    }
+
+    .food-meta {
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .badge {
+      font-size: 12px;
+      font-weight: 800;
+      color: #166534;
+      background: #dcfce7;
+      padding: 7px 10px;
+      border-radius: 999px;
+    }
+
+    section {
+      padding: 34px 0;
+    }
+
+    .section-head {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(28px, 4vw, 42px);
+      margin: 0 0 12px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      max-width: 720px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: 0 10px 28px rgba(17, 24, 39, 0.04);
+    }
+
+    .icon {
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: #fff1ed;
+      color: var(--primary);
+      font-size: 24px;
+      margin-bottom: 16px;
+    }
+
+    .card h3 {
+      margin: 0 0 10px;
+      font-size: 20px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+    }
+
+    .list {
+      margin: 18px 0 0;
+      padding: 0;
+      list-style: none;
+    }
+
+    .list li {
+      padding: 12px 0;
+      border-bottom: 1px solid #f5e5df;
+      color: var(--muted);
+    }
+
+    .list li strong {
+      color: var(--text);
+    }
+
+    .cta {
+      padding: 18px 0 80px;
+    }
+
+    .cta-box {
+      background: linear-gradient(135deg, #e53935 0%, #ff6b57 100%);
+      color: white;
+      border-radius: 28px;
+      padding: 38px;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .cta h2 {
+      margin: 0 0 10px;
+      font-size: clamp(28px, 4vw, 42px);
+    }
+
+    .cta p {
+      margin: 0;
+      color: rgba(255,255,255,0.9);
+      line-height: 1.7;
+    }
+
+    .cta-form {
+      background: rgba(255,255,255,0.14);
+      padding: 16px;
+      border-radius: 18px;
+      backdrop-filter: blur(6px);
+    }
+
+    .cta-form form {
+      display: grid;
+      gap: 12px;
+    }
+
+    .cta-form input, .cta-form select {
+      width: 100%;
+      padding: 14px 14px;
+      border-radius: 12px;
+      border: none;
+      font-size: 15px;
+    }
+
+    .cta-form button {
+      width: 100%;
+      background: #111827;
+      color: white;
+    }
+
+    footer {
+      padding: 24px 0 40px;
+      color: var(--muted);
+      font-size: 14px;
+      text-align: center;
+    }
+
+    @media (max-width: 980px) {
+      .hero-grid,
+      .grid-3,
+      .split,
+      .cta-box {
+        grid-template-columns: 1fr;
+      }
+
+      .phone-wrap { order: -1; }
+      .nav-links a:not(.btn) { display: none; }
+    }
+
+    @media (max-width: 640px) {
+      .hero { padding-top: 36px; }
+      .container { width: min(var(--max), calc(100% - 20px)); }
+      .card, .cta-box { padding: 20px; }
+      .phone { width: 100%; max-width: 320px; }
+      .hero-actions { flex-direction: column; }
+      .hero-actions .btn { width: 100%; }
+    }
+  </style>
 </head>
-
 <body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#top">
+        <span class="brand-badge">🍜</span>
+        <span>NoodMart</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#vendors">For Vendors</a>
+        <a href="#waitlist">Waitlist</a>
+        <a class="btn btn-primary" href="#waitlist">Get Early Access</a>
+      </div>
+    </div>
+  </nav>
 
-<h1>NoodMart</h1>
+  <header class="hero" id="top">
+    <div class="container hero-grid">
+      <div>
+        <div class="eyebrow">🚀 Launching soon in Samanoud</div>
+        <h1>Order from local restaurants faster, smarter, and easier.</h1>
+        <p>
+          NoodMart helps customers discover nearby food spots and order in minutes, while giving restaurants a simple way to publish menus, manage products, and grow sales online.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#waitlist">Join the waitlist</a>
+          <a class="btn btn-secondary" href="#vendors">Restaurant signup</a>
+        </div>
+        <div class="hero-note">
+          <span>Fast local delivery</span>
+          <span>Simple restaurant onboarding</span>
+          <span>Built for local growth</span>
+        </div>
+      </div>
 
-<p>
-Food marketplace connecting restaurants and customers in Samanoud
-</p>
+      <div class="phone-wrap">
+        <div class="glow"></div>
+        <div class="phone">
+          <div class="screen">
+            <div class="screen-top">
+              <span>9:41</span>
+              <span>📶 🔋</span>
+            </div>
+            <div class="app-title">Find your next meal</div>
+            <div class="search-box">🔎 Search restaurants or meals</div>
+            <div class="chips">
+              <div class="chip active">Popular</div>
+              <div class="chip">Pizza</div>
+              <div class="chip">Burgers</div>
+              <div class="chip">Koshary</div>
+              <div class="chip">Desserts</div>
+            </div>
 
-<p>🚀 Launching Soon</p>
+            <div class="food-card">
+              <div class="food-cover"></div>
+              <div class="food-content">
+                <div class="food-header">
+                  <div>
+                    <div class="food-name">Mama’s Kitchen</div>
+                    <div class="food-meta">4.8 ★ • 25-35 min • Local favorites</div>
+                  </div>
+                  <div class="badge">Top rated</div>
+                </div>
+              </div>
+            </div>
 
-<button>Join Waitlist</button>
+            <div class="food-card">
+              <div class="food-cover" style="background: linear-gradient(135deg, #ff8a65, #ef5350);"></div>
+              <div class="food-content">
+                <div class="food-header">
+                  <div>
+                    <div class="food-name">Burger House</div>
+                    <div class="food-meta">4.7 ★ • 20-30 min • Burgers & fries</div>
+                  </div>
+                  <div class="badge">Fast</div>
+                </div>
+              </div>
+            </div>
 
+            <div class="food-card">
+              <div class="food-cover" style="background: linear-gradient(135deg, #fbc02d, #fb8c00);"></div>
+              <div class="food-content">
+                <div class="food-header">
+                  <div>
+                    <div class="food-name">Sweet Bite</div>
+                    <div class="food-meta">4.9 ★ • 15-25 min • Desserts</div>
+                  </div>
+                  <div class="badge">New</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <section id="features">
+    <div class="container">
+      <div class="section-head">
+        <h2>Built for customers and vendors</h2>
+        <p>
+          A simple food marketplace experience that helps users order quickly and helps restaurants manage their online presence without technical complexity.
+        </p>
+      </div>
+      <div class="grid-3">
+        <div class="card">
+          <div class="icon">⚡</div>
+          <h3>Fast ordering</h3>
+          <p>Customers can browse meals, discover local restaurants, and place orders with a smooth, mobile-friendly flow.</p>
+        </div>
+        <div class="card">
+          <div class="icon">🏪</div>
+          <h3>Easy vendor setup</h3>
+          <p>Restaurants can add products, update menus, and publish offers without needing a complex dashboard.</p>
+        </div>
+        <div class="card">
+          <div class="icon">📍</div>
+          <h3>Local-first delivery</h3>
+          <p>NoodMart is focused on nearby communities, making discovery, ordering, and delivery more practical and efficient.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="vendors">
+    <div class="container split">
+      <div class="card">
+        <h3>Why restaurants will like NoodMart</h3>
+        <ul class="list">
+          <li><strong>Publish products fast:</strong> add meals, prices, categories, and offers in a simple flow.</li>
+          <li><strong>More visibility:</strong> appear in front of nearby customers searching for meals.</li>
+          <li><strong>Easy onboarding:</strong> start small, then scale your menu and promotions over time.</li>
+          <li><strong>Better communication:</strong> receive clear order details and stay connected with customers.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Perfect for launch-stage validation</h3>
+        <ul class="list">
+          <li><strong>Customer waitlist:</strong> collect early users before the mobile app launch.</li>
+          <li><strong>Merchant interest:</strong> capture vendor signups and build a restaurant pipeline.</li>
+          <li><strong>Lean MVP approach:</strong> validate demand before investing in bigger rollout costs.</li>
+          <li><strong>Strong brand presence:</strong> turn noodmart.com into a real startup homepage from day one.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="cta" id="waitlist">
+    <div class="container">
+      <div class="cta-box">
+        <div>
+          <h2>Be one of the first to try NoodMart</h2>
+          <p>
+            Join the waitlist if you’re a customer who wants early access, or sign up as a restaurant to get onboarded before launch.
+          </p>
+        </div>
+        <div class="cta-form">
+          <form onsubmit="event.preventDefault(); alert('Thanks! Your interest has been recorded.');">
+            <input type="text" placeholder="Your name" required />
+            <input type="email" placeholder="Your email address" required />
+            <select required>
+              <option value="">I am interested as...</option>
+              <option>Customer</option>
+              <option>Restaurant / Vendor</option>
+              <option>Investor / Partner</option>
+            </select>
+            <button class="btn" type="submit">Join now</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container">
+      © 2026 NoodMart. All rights reserved. Built for local food commerce.
+    </div>
+  </footer>
 </body>
 </html>
